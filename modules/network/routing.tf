@@ -7,9 +7,9 @@ resource "aws_route_table" "public-routing-table" {
   }
 
   tags = {
-    Name        = "${var.vpc_name}-Public-RT"
-    DeployedBy  = local.DeployedBy
-    Costcenter  = local.Costcenter
+    Name        = "${var.vpc_name}-public-RT"
+    DeployedBy  = local.Owner
+    Costcenter  = local.costcenter
     TeamDL      = local.TeamDL
     environment = "${var.environment}"
   }
@@ -19,12 +19,12 @@ resource "aws_route_table" "private-routing-table" {
   vpc_id = aws_vpc.default.id
 route {
     cidr_block = "0.0.0.0/0"
-    nat_gateway_id = var.natgw_id
+    gateway_id = aws_internet_gateway.default.id
   }
   tags = {
-    Name        = "${var.vpc_name}-Private-RT"
-    DeployedBy  = local.DeployedBy
-    Costcenter  = local.Costcenter
+    Name        = "${var.vpc_name}-private-RT"
+    DeployedBy  = local.Owner
+    Costcenter  = local.costcenter
     TeamDL      = local.TeamDL
     environment = "${var.environment}"
   }
