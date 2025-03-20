@@ -8,8 +8,8 @@ resource "aws_route_table" "public-routing-table" {
 
   tags = {
     Name        = "${var.vpc_name}-public-RT"
-    DeployedBy  = local.Owner
-    Costcenter  = local.costcenter
+    Owner       = local.Owner
+    costcenter  = local.costcenter
     TeamDL      = local.TeamDL
     environment = "${var.environment}"
   }
@@ -23,8 +23,8 @@ route {
   }
   tags = {
     Name        = "${var.vpc_name}-private-RT"
-    DeployedBy  = local.Owner
-    Costcenter  = local.costcenter
+    Owner       = local.Owner
+    costcenter  = local.costcenter
     TeamDL      = local.TeamDL
     environment = "${var.environment}"
   }

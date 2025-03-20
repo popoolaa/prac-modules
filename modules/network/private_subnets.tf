@@ -6,8 +6,8 @@ resource "aws_subnet" "private-subnets" {
 
   tags = {
     Name        = "${var.vpc_name}-private-Subnet-${count.index + 1}"
-    DeployedBy  = local.Owner
-    Costcenter  = local.costcenter
+    Owner       = local.Owner
+    costcenter  = local.costcenter
     TeamDL      = local.TeamDL
     environment = "${var.environment}"
   }
