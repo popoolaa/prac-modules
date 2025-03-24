@@ -11,9 +11,9 @@ output environment {
 }
 
 output private-subnet {
-  value       = aws_subnet.private-subnet.id
+  value       = "aws_subnet.private-subnets.*.id"
 }
 
 output public-subnet {
-  value       = aws_subnet.public-subnet.id
+  value       = "aws_subnet.public-subnets.*.id"
 }
