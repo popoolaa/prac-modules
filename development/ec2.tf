@@ -7,8 +7,8 @@ module "dev_ec2_1" {
   }
   aws_region = var.aws_region
   key_name = "myKey2021"
-  public_subnets = module.dev_vpc_1.public-subnet
-  private_subnets = module.dev_vpc_1.private-subnet
+  public_subnets = module.dev_vpc_1.public-subnets
+  private_subnets = module.dev_vpc_1.private-subnets
   sg_id = module.dev_sg_1.sg_id
   vpc_name = module.dev_vpc_1.vpc_name
 }

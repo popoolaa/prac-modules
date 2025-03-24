@@ -5,7 +5,7 @@ resource "aws_subnet" "private-subnet" {
   availability_zone = element(var.azs, count.index)
 
   tags = {
-    Name        = "${var.vpc_name}-private-Subnet-${count.index + 1}"
+    Name        = "${var.vpc_name}-private-subnet-${count.index + 1}"
     Owner       = local.Owner
     costcenter  = local.costcenter
     TeamDL      = local.TeamDL
