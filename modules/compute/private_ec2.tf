@@ -4,7 +4,7 @@ resource "aws_instance" "private-server" {
   ami                    = lookup(var.amis, var.aws_region)
   instance_type          = "t2.micro"
   key_name               = var.key_name
-  subnet_id              = element(var.private-subnets, count.index)
+  subnet_id              = element(var.private_subnets, count.index)
   vpc_security_group_ids = [var.sg_id]
   # associate_public_ip_address = true	
   tags = {
