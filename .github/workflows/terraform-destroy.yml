@@ -1,0 +1,84 @@
+name: Terraform Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Which environment to destroy"
+        required: true
+        type: choice
+        options:
+          - development
+          - production
+          - both
+      confirm:
+        description: 'Type "destroy" to confirm this is intentional'
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  TF_VERSION: "1.7.5"
+  AWS_REGION: "us-east-1"
+
+jobs:
+  guard:
+    name: Confirm intent
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check confirmation phrase
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "destroy" ]; then
+            echo "Confirmation phrase did not match 'destroy'. Aborting."
+            exit 1
+          fi
+
+  destroy-development:
+    name: Destroy (development)
+    needs: guard
+    if: github.event.inputs.target == 'development' || github.event.inputs.target == 'both'
+    runs-on: ubuntu-latest
+    environment: development
+    defaults:
+      run:
+        working-directory: development
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_TF_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - run: terraform init -input=false
+      - run: terraform destroy -auto-approve -input=false
+
+  destroy-production:
+    name: Destroy (production)
+    needs: guard
+    if: github.event.inputs.target == 'production' || github.event.inputs.target == 'both'
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_TF_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - run: terraform init -input=false
+      - run: terraform destroy -auto-approve -input=false
