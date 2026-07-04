@@ -8,7 +8,7 @@ resource "aws_instance" "private-server" {
   vpc_security_group_ids = [var.sg_id]
   # associate_public_ip_address = true	
   tags = {
-    Name        = "${var.vpc_name}-Private-Server-${count.index + 1}"
+    Name = "${var.vpc_name}-Private-Server-${count.index + 1}"
     # Owner       = local.Owner
     # costcenter  = local.costcenter
     # TeamDL      = local.TeamDL

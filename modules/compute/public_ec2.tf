@@ -8,13 +8,13 @@ resource "aws_instance" "public-server" {
   vpc_security_group_ids      = [var.sg_id]
   associate_public_ip_address = true
   tags = {
-    Name        = "${var.vpc_name}-Public-Server-${count.index + 1}"
+    Name = "${var.vpc_name}-Public-Server-${count.index + 1}"
     #Owner       = local.Owner
     #costcenter  = local.costcenter
     #TeamDL      = local.TeamDL
     environment = "${var.environment}"
   }
-user_data = <<-EOF
+  user_data = <<-EOF
      #!/bin/bash
      sudo apt update
      sudo apt install nginx -y
