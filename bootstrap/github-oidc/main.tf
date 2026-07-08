@@ -114,6 +114,7 @@ data "aws_iam_policy_document" "eks_management" {
       "iam:AttachRolePolicy",
       "iam:DetachRolePolicy",
       "iam:ListAttachedRolePolicies",
+      "iam:ListRolePolicies",
       "iam:ListInstanceProfilesForRole",
       "iam:PassRole",
     ]
