@@ -1,0 +1,39 @@
+name: Build and Push App Image
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "app/**"
+      - ".github/workflows/build-and-push.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-push:
+    name: Build and push (development)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_TF_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: ecr-login
+
+      - name: Build and push
+        working-directory: app
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPO: dev-secops-game
+          FLOAT_TAG: dev
+        run: |
+          docker build -t "$REGISTRY/$REPO:${{ github.sha }}" -t "$REGISTRY/$REPO:$FLOAT_TAG" .
+          docker push "$REGISTRY/$REPO:${{ github.sha }}"
+          docker push "$REGISTRY/$REPO:$FLOAT_TAG"

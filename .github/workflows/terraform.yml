@@ -99,6 +99,7 @@ jobs:
     name: Apply (development)
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: development
     concurrency:
       group: terraform-apply-development
@@ -125,6 +126,7 @@ jobs:
     name: Apply (production)
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: production
     concurrency:
       group: terraform-apply-production
