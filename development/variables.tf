@@ -6,7 +6,7 @@ variable "aws_region" {}
 # gets bootstrap admin automatically as the cluster creator) can access it.
 variable "admin_principal_arns" {
   type    = list(string)
-  default = []
+  default = ["arn:aws:iam::900060399717:user/deepops"]
 }
 
 # EKS standard support for a minor version runs out ~14 months after
