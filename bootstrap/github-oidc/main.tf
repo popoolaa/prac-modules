@@ -126,11 +126,13 @@ data "aws_iam_policy_document" "eks_management" {
 
   # This account has never used EKS before. The very first cluster/node
   # group creation triggers AWS to auto-create
-  # AWSServiceRoleForAmazonEKS(Nodegroup) — without this permission, that
-  # first apply fails with a cryptic AccessDenied that's easy to miss.
+  # AWSServiceRoleForAmazonEKS(Nodegroup) — CreateNodegroup itself checks
+  # via iam:GetRole whether the service-linked role already exists before
+  # deciding whether to create it, so both actions are needed or the first
+  # apply fails with a cryptic error about validating the SLR.
   statement {
     effect    = "Allow"
-    actions   = ["iam:CreateServiceLinkedRole"]
+    actions   = ["iam:CreateServiceLinkedRole", "iam:GetRole"]
     resources = ["arn:aws:iam::*:role/aws-service-role/*eks*"]
   }
 }
