@@ -1,12 +1,17 @@
 variable "aws_region" {}
 
-# IAM principals (your own IAM user/role ARN) granted cluster-admin on the
-# EKS cluster via an Access Entry, so you can `aws eks update-kubeconfig` +
-# `kubectl` in for verification. Leave empty and only the CI role (which
-# gets bootstrap admin automatically as the cluster creator) can access it.
+# IAM principals granted cluster-admin on the EKS cluster via an Access
+# Entry. Only the identity that actually called CreateCluster gets
+# bootstrap admin automatically — whichever of local `deepops` or the CI
+# role (github-actions-terraform) applies first "wins" that, so both need
+# to be listed explicitly here to guarantee access regardless of who ends
+# up creating/re-creating the cluster.
 variable "admin_principal_arns" {
-  type    = list(string)
-  default = ["arn:aws:iam::900060399717:user/deepops"]
+  type = list(string)
+  default = [
+    "arn:aws:iam::900060399717:user/deepops",
+    "arn:aws:iam::900060399717:role/github-actions-terraform",
+  ]
 }
 
 # EKS standard support for a minor version runs out ~14 months after
